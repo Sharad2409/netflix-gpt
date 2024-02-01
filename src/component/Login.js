@@ -1,49 +1,159 @@
-import React, { useRef } from 'react'
-import { useState } from 'react'
-import { checkValidData } from '../utils/ValidData';
+import React, { useRef } from "react";
+import { useState } from "react";
+import { checkValidData } from "../utils/ValidData";
+import {
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  updateProfile,
+} from "firebase/auth";
+import { auth } from "../utils/firebase";
+import bgImg from "../images/marques-kaspbrak-5wThjqG6HBU-unsplash.jpg";
+import Header from "./Header";
+import { useDispatch } from "react-redux";
+import { addUser } from "../utils/UserSlice";
 
 const Login = () => {
-  const [isSignIn, setIsSignIn] = useState(true)
-  const [errorMessage, setErrorMessage] = useState(null)
+  const dispatch = useDispatch();
+  const [isSignIn, setIsSignIn] = useState(true);
+  const [errorMessage, setErrorMessage] = useState(null);
 
-  const email = useRef(null)
-  const password = useRef(null)
-  const userName = useRef("")
+  const email = useRef(null);
+  const password = useRef(null);
+  const userName = useRef("");
 
-  function toggleSignInForm () {
-    setIsSignIn(!isSignIn)
+  function toggleSignInForm() {
+    setIsSignIn(!isSignIn);
   }
 
   const submitHanlder = () => {
-    const message = checkValidData (userName.current.value, email.current.value, password.current.value, isSignIn)
-    setErrorMessage(message)
-  }
+    const message = checkValidData(
+      userName.current?.value,
+      email.current.value,
+      password.current.value,
+      isSignIn
+    );
+    setErrorMessage(message);
+    if (message) return;
+
+    if (!isSignIn) {
+      createUserWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          // Signed up
+          const user = userCredential.user;
+          updateProfile(user, {
+            displayName: userName.current?.value,
+            photoURL:
+              "https://lh3.googleusercontent.com/a/ACg8ocLI7AmHcWsGHlXW_29O-kUR-O1h448CBImuP79a81ajhmA=s96-c",
+          })
+            .then(() => {
+              const { uid, email, displayName, photoURL } = user;
+              dispatch(
+                addUser({
+                  uid: uid,
+                  email: email,
+                  displayName: displayName,
+                  photoURL: photoURL,
+                })
+              );
+            })
+            .catch((error) => {
+              setErrorMessage(error.message);
+            });
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + " " + errorMessage);
+        });
+    } else {
+      signInWithEmailAndPassword(
+        auth,
+        email.current.value,
+        password.current.value
+      )
+        .then((userCredential) => {
+          const user = userCredential.user;
+        })
+        .catch((error) => {
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          setErrorMessage(errorCode + " " + errorMessage);
+        });
+    }
+  };
 
   return (
-    <div className='flex items-center justify-center h-screen'>
-      <div className='bg-black w-full max-w-md px-16 pt-16 pb-24 opacity-85'>
-          <h1 className='text-white font-bold text-left mb-6 text-2xl'>{isSignIn ? "Sign In" : "Sign Up"}</h1>
-          <form onSubmit={(e)=> e.preventDefault()}>
-            {
-              !isSignIn ? <div className='form-control'>
-              <input ref={userName} id="username" type='text' placeholder='Username' className='w-full p-2 mb-6 bg-gray-700 rounded-sm' />
-            </div> : ""
-            }
-            <div className='form-control'>
-              <input ref={email} id="email" type='text' placeholder='Email Address' className='w-full p-2 mb-6 bg-gray-700 rounded-sm' />
-            </div>
-            <div className='form-control'>
-              <input ref={password} id="password" type='password' placeholder='Password' className='w-full p-2 mb-6 bg-gray-700 rounded-sm' />
-            </div>
-            <p className='text-red-500 text-lg text-left'>{errorMessage}</p>
-            <button type='submit' onClick={submitHanlder} className='w-full p-3 bg-red-500 text-white mb-8 mt-4 rounded-sm'>{isSignIn ? "Sign In" : "Sign Up"}</button>
-          </form>
-          <p className='text-white text-left cursor-pointer' onClick={toggleSignInForm}>
-            { isSignIn ? "New user? Sign Up Now" : "Already registered? Sign In Now"} 
-          </p>
+    <>
+      <Header isSignIn={isSignIn} />
+      <div className="w-full absolute -z-50 top-0 left-0">
+        <img
+          src={bgImg}
+          alt="bgimage"
+          className="w-full h-screen object-cover"
+        />
       </div>
-    </div>
-  )
-}
+      <div className="flex items-center justify-center opacity-95">
+        <div className="bg-black w-full max-w-md px-16 pt-16 pb-24">
+          <h1 className="text-white font-bold text-left mb-6 text-2xl">
+            {isSignIn ? "Sign In" : "Sign Up"}
+          </h1>
+          <form onSubmit={(e) => e.preventDefault()}>
+            {!isSignIn ? (
+              <div className="form-control">
+                <input
+                  ref={userName}
+                  id="username"
+                  type="text"
+                  placeholder="Username"
+                  className="w-full p-2 mb-6 bg-gray-700 rounded-sm"
+                />
+              </div>
+            ) : (
+              ""
+            )}
+            <div className="form-control">
+              <input
+                ref={email}
+                id="email"
+                type="text"
+                placeholder="Email Address"
+                className="w-full p-2 mb-6 bg-gray-700 rounded-sm"
+              />
+            </div>
+            <div className="form-control">
+              <input
+                ref={password}
+                id="password"
+                type="password"
+                placeholder="Password"
+                className="w-full p-2 mb-6 bg-gray-700 rounded-sm"
+              />
+            </div>
+            <p className="text-red-500 text-lg text-left">{errorMessage}</p>
+            <button
+              type="submit"
+              onClick={submitHanlder}
+              className="w-full p-3 bg-red-700 text-white mb-8 mt-4 rounded-sm"
+            >
+              {isSignIn ? "Sign In" : "Sign Up"}
+            </button>
+          </form>
+          <p
+            className="text-white text-left cursor-pointer"
+            onClick={toggleSignInForm}
+          >
+            {isSignIn
+              ? "New user? Sign up now"
+              : "Already registered? Sign in now"}
+          </p>
+        </div>
+      </div>
+    </>
+  );
+};
 
-export default Login
+export default Login;
