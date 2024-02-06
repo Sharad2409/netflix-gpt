@@ -1,5 +1,6 @@
-import React, { useRef } from "react";
-import { useState } from "react";
+import React, { useRef, useState } from "react";
+import bgImg from "../images/marques-kaspbrak-5wThjqG6HBU-unsplash.jpg";
+import Header from "./Header";
 import { checkValidData } from "../utils/ValidData";
 import {
   createUserWithEmailAndPassword,
@@ -7,10 +8,9 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../utils/firebase";
-import bgImg from "../images/marques-kaspbrak-5wThjqG6HBU-unsplash.jpg";
-import Header from "./Header";
 import { useDispatch } from "react-redux";
-import { addUser } from "../utils/UserSlice";
+import { addUser } from "../utils/userSlice";
+import { USER_AVATAR } from "../utils/constants";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -46,8 +46,7 @@ const Login = () => {
           const user = userCredential.user;
           updateProfile(user, {
             displayName: userName.current?.value,
-            photoURL:
-              "https://lh3.googleusercontent.com/a/ACg8ocLI7AmHcWsGHlXW_29O-kUR-O1h448CBImuP79a81ajhmA=s96-c",
+            photoURL: USER_AVATAR,
           })
             .then(() => {
               const { uid, email, displayName, photoURL } = user;

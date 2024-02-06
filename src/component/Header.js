@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../utils/firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
-import { addUser, removeUser } from "../utils/UserSlice";
+import { addUser, removeUser } from "../utils/userSlice";
 
 const Header = (props) => {
   const navigate = useNavigate();
@@ -18,7 +18,7 @@ const Header = (props) => {
   };
 
   useEffect(() => {
-    return onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         const { uid, email, displayName, photoURL } = user;
         dispatch(
@@ -35,6 +35,9 @@ const Header = (props) => {
         navigate("/")
       }
     });
+
+    // this will be called unsubscribe when component unmounts
+    return () => unsubscribe;
   }, []);
 
   return (
