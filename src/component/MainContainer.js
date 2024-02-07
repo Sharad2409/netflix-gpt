@@ -8,12 +8,12 @@ const MainContainer = () => {
     if(!movies) return
     const mainMovie = movies[0];
     const {title, overview, id} = mainMovie
-  return (
-    <div>
-        <VideoTitle title={title} overview={overview} />
-        <VideoBackground movieId={id} />
-    </div>
-  )
+    return (
+        <div className='relative'>
+            <VideoTitle title={title} overview={overview} />
+            <VideoBackground movieId={id} />
+        </div>
+    )
 }
 
 export default MainContainer

@@ -95,7 +95,7 @@ const Login = () => {
           className="w-full h-screen object-cover"
         />
       </div>
-      <div className="flex items-center justify-center opacity-95">
+      <div className="flex items-center justify-center opacity-95 mt-28">
         <div className="bg-black w-full max-w-md px-16 pt-16 pb-24">
           <h1 className="text-white font-bold text-left mb-6 text-2xl">
             {isSignIn ? "Sign In" : "Sign Up"}
@@ -108,7 +108,7 @@ const Login = () => {
                   id="username"
                   type="text"
                   placeholder="Username"
-                  className="w-full p-2 mb-6 bg-gray-700 rounded-sm"
+                  className="w-full p-2 mb-6 bg-gray-700 rounded-sm text-white"
                 />
               </div>
             ) : (
@@ -120,7 +120,7 @@ const Login = () => {
                 id="email"
                 type="text"
                 placeholder="Email Address"
-                className="w-full p-2 mb-6 bg-gray-700 rounded-sm"
+                className="w-full p-2 mb-6 bg-gray-700 rounded-sm text-white"
               />
             </div>
             <div className="form-control">
@@ -129,7 +129,7 @@ const Login = () => {
                 id="password"
                 type="password"
                 placeholder="Password"
-                className="w-full p-2 mb-6 bg-gray-700 rounded-sm"
+                className="w-full p-2 mb-6 bg-gray-700 rounded-sm text-white"
               />
             </div>
             <p className="text-red-500 text-lg text-left">{errorMessage}</p>
