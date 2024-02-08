@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-import bgImg from "../images/marques-kaspbrak-5wThjqG6HBU-unsplash.jpg";
+import bgImg from "../images/marques-kaspbrak.jpg";
 import Header from "./Header";
 import { checkValidData } from "../utils/ValidData";
 import {

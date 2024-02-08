@@ -4,11 +4,16 @@ import { auth } from "../utils/firebase";
 import { signOut, onAuthStateChanged } from "firebase/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { addUser, removeUser } from "../utils/userSlice";
+import { toggleGptSearchView } from "../utils/gptSlice";
+import { SUPPORTED_LANGUAGES } from "../utils/constants";
+import { changeLanguage } from "../utils/configSlice";
 
 const Header = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((appStore) => appStore.user);
+  const showGptSearch = useSelector(store=> store.gpt.showGptSearch)
+
   const signOutHandler = () => {
     signOut(auth)
       .then(() => {})
@@ -39,6 +44,18 @@ const Header = (props) => {
     // this will be called unsubscribe when component unmounts
     return () => unsubscribe;
   }, []);
+
+  const handleGptSearchClick = () => {
+    return(
+      dispatch(toggleGptSearchView())
+    )
+  }
+
+  const handleChangeLang = (e) => {
+    return (
+      dispatch(changeLanguage(e.target.value))
+    )
+  }
 
   return (
     <header className="flex justify-between items-center px-10 py-6 absolute left-0 top-0 w-full z-10 text-white">
@@ -74,8 +91,22 @@ const Header = (props) => {
         </svg>
       </div>
       {user && (
-        <div className="flex items-center">
-          <div className=" w-14 h-14 rounded-full p-1 border border-solid border-slate-600">
+        <div className="flex items-center pl-2">
+          {
+            showGptSearch && (
+              <select className="bg-gray-900 p-2 mr-4" onChange={handleChangeLang}>
+                {
+                  SUPPORTED_LANGUAGES.map(options=> <option key={options.identifier} value={options.identifier}>{options.name}</option>)
+                }
+              </select>
+            )
+          }
+          <button className="py-2 px-4 mr-6 bg-red-700 rounded-sm" onClick={handleGptSearchClick}>
+            {
+              !showGptSearch ? "GPT Search" : "Homepage"
+            }
+          </button>
+          <div className=" w-14 h-14 rounded-full p-1 border border-solid border-white">
             <img
               className="rounded-full"
               src={user?.photoURL}
@@ -83,9 +114,9 @@ const Header = (props) => {
             ></img>
           </div>
           <div className="ml-2">
-            <p className="font-semibold">Hi, {user?.displayName}</p>
+            <p className="text-md">Hi, {user?.displayName}</p>
             <p
-              className="cursor-pointer font-semibold"
+              className="cursor-pointer text-md"
               onClick={signOutHandler}
             >
               Sign Out

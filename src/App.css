@@ -3,10 +3,10 @@
   height: 8px;
 }
 ::-webkit-scrollbar-thumb {
-  background: black;
+  background: white;
 }
 
 ::-webkit-scrollbar-track {
-  background: white;
+  background: black;
   box-shadow: none;
 }
