@@ -95,8 +95,8 @@ const Login = () => {
           className="w-full h-screen object-cover"
         />
       </div>
-      <div className="flex items-center justify-center opacity-95 mt-28">
-        <div className="bg-black w-full max-w-md px-16 pt-16 pb-24">
+      <div className="flex items-center justify-center opacity-95 p-2 h-screen">
+        <div className="bg-black w-full max-w-md px-16 pt-16 pb-24 max-md:px-12 max-md:pb-20">
           <h1 className="text-white font-bold text-left mb-6 text-2xl">
             {isSignIn ? "Sign In" : "Sign Up"}
           </h1>
@@ -108,7 +108,7 @@ const Login = () => {
                   id="username"
                   type="text"
                   placeholder="Username"
-                  className="w-full p-2 mb-6 bg-gray-700 rounded-sm text-white"
+                  className="w-full p-2 mb-6 bg-gray-700 rounded-sm text-white focus-visible:outline-none"
                 />
               </div>
             ) : (
@@ -120,7 +120,7 @@ const Login = () => {
                 id="email"
                 type="text"
                 placeholder="Email Address"
-                className="w-full p-2 mb-6 bg-gray-700 rounded-sm text-white"
+                className="w-full p-2 mb-6 bg-gray-700 rounded-sm text-white focus-visible:outline-none"
               />
             </div>
             <div className="form-control">
@@ -129,7 +129,7 @@ const Login = () => {
                 id="password"
                 type="password"
                 placeholder="Password"
-                className="w-full p-2 mb-6 bg-gray-700 rounded-sm text-white"
+                className="w-full p-2 mb-6 bg-gray-700 rounded-sm text-white focus-visible:outline-none"
               />
             </div>
             <p className="text-red-500 text-lg text-left">{errorMessage}</p>

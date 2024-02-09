@@ -12,7 +12,7 @@ const Header = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const user = useSelector((appStore) => appStore.user);
-  const showGptSearch = useSelector(store=> store.gpt.showGptSearch)
+  const showGptSearch = useSelector((store) => store.gpt.showGptSearch);
 
   const signOutHandler = () => {
     signOut(auth)
@@ -34,10 +34,10 @@ const Header = (props) => {
             photoURL: photoURL,
           })
         );
-        navigate("/browse")
+        navigate("/browse");
       } else {
         dispatch(removeUser());
-        navigate("/")
+        navigate("/");
       }
     });
 
@@ -46,20 +46,16 @@ const Header = (props) => {
   }, []);
 
   const handleGptSearchClick = () => {
-    return(
-      dispatch(toggleGptSearchView())
-    )
-  }
+    return dispatch(toggleGptSearchView());
+  };
 
   const handleChangeLang = (e) => {
-    return (
-      dispatch(changeLanguage(e.target.value))
-    )
-  }
+    return dispatch(changeLanguage(e.target.value));
+  };
 
   return (
-    <header className="flex justify-between items-center px-10 py-6 absolute left-0 top-0 w-full z-10 text-white">
-      <div className="logo">
+    <header className="flex justify-between items-center px-10 py-6 absolute left-0 top-0 w-full z-10 text-white max-md:justify-center max-md:flex-col max-md:p-4">
+      <div className="max-md:mb-4">
         <svg
           width="100"
           height="70"
@@ -91,20 +87,24 @@ const Header = (props) => {
         </svg>
       </div>
       {user && (
-        <div className="flex items-center pl-2">
-          {
-            showGptSearch && (
-              <select className="bg-gray-900 p-2 mr-4" onChange={handleChangeLang}>
-                {
-                  SUPPORTED_LANGUAGES.map(options=> <option key={options.identifier} value={options.identifier}>{options.name}</option>)
-                }
-              </select>
-            )
-          }
-          <button className="py-2 px-4 mr-6 bg-red-700 rounded-sm" onClick={handleGptSearchClick}>
-            {
-              !showGptSearch ? "GPT Search" : "Homepage"
-            }
+        <div className="flex items-center pl-2 max-md:pl-0">
+          {showGptSearch && (
+            <select
+              className="bg-gray-900 p-2 mr-4"
+              onChange={handleChangeLang}
+            >
+              {SUPPORTED_LANGUAGES.map((options) => (
+                <option key={options.identifier} value={options.identifier}>
+                  {options.name}
+                </option>
+              ))}
+            </select>
+          )}
+          <button
+            className="py-2 px-4 mr-6 bg-red-700 rounded-sm max-md:mr-2"
+            onClick={handleGptSearchClick}
+          >
+            {!showGptSearch ? "GPT Search" : "Homepage"}
           </button>
           <div className=" w-14 h-14 rounded-full p-1 border border-solid border-white">
             <img
@@ -115,10 +115,7 @@ const Header = (props) => {
           </div>
           <div className="ml-2">
             <p className="text-md">Hi, {user?.displayName}</p>
-            <p
-              className="cursor-pointer text-md"
-              onClick={signOutHandler}
-            >
+            <p className="cursor-pointer text-md" onClick={signOutHandler}>
               Sign Out
             </p>
           </div>
